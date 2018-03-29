@@ -166,13 +166,17 @@ class RpcAgent(object):
             message_type = self.RESPONSE
             result = None
             # handle callback
-            callback = self._callbacks.pop(data["id"])
-            if "result" in data:
-                callback.rpc_result(data["result"])
-            elif "error" in data:
-                callback.rpc_error(data["error"])
+            # id=-1的回包默认用作协议解析异常信息报到IDE里看
+            if data['id'] == -1:
+                print data
             else:
-                pass
+                callback = self._callbacks.pop(data["id"])
+                if "result" in data:
+                    callback.rpc_result(data["result"])
+                elif "error" in data:
+                    callback.rpc_error(data["error"])
+                else:
+                    pass
         return message_type, result
 
     def update(self):
