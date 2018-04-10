@@ -86,6 +86,14 @@ class UIObjectProxy(object):
         # 相对于包围盒的focus point定义，用于touch/swipe/drag操作的局部相对定位
         self._focus = None
 
+    def __getattr__(self, name):
+        """
+        直接获取访问属性
+        :param name: 属性名
+        :return:属性值
+        """
+        return self.attr(name)
+
     def child(self, name=None, **attrs):
         """
         Select the direct child(ren) from the UI element(s) given by the query expression, see ``QueryCondition`` for
